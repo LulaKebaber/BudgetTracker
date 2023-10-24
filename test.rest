@@ -1,0 +1,19 @@
+POST http://127.0.0.1:8000/api/add-person/
+Content-Type: application/json
+
+{
+    "name": "John Doe",
+    "telegram_id": "1"
+}
+
+###
+
+POST http://127.0.0.1:8000/api/add-expense/
+Content-Type: application/json
+
+{
+    "buyer": "123",
+    "amount": 50.00,
+    "date": "2023-10-23",
+    "description": "Покупка продуктов"
+}
