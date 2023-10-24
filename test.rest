@@ -12,8 +12,19 @@ POST http://127.0.0.1:8000/api/add-expense/
 Content-Type: application/json
 
 {
-    "buyer": "123",
+    "buyer": "1",
     "amount": 50.00,
     "date": "2023-10-23",
     "description": "Покупка продуктов"
+}
+
+###
+
+POST http://127.0.0.1:8000/api/add-settlement/
+Content-Type: application/json
+
+{
+  "payer": "123",
+  "recipient": "1",
+  "amount": 100
 }
