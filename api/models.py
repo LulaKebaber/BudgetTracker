@@ -18,3 +18,9 @@ class Settlement(models.Model):
     payer = models.ForeignKey(Person, related_name='payer_settlements', on_delete=models.CASCADE)
     recipient = models.ForeignKey(Person, related_name='recipient_settlements', on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
+
+
+class House(models.Model):
+    name = models.CharField(max_length=100)
+    members = models.ManyToManyField(Person, related_name='houses')
+    owner = models.ForeignKey(Person, related_name='owned_houses', on_delete=models.CASCADE)

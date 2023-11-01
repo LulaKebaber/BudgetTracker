@@ -3,7 +3,7 @@ Content-Type: application/json
 
 {
     "name": "John Doe",
-    "telegram_id": "1"
+    "telegram_id": "12132"
 }
 
 ###
@@ -24,7 +24,7 @@ POST http://127.0.0.1:8000/api/add-settlement/
 Content-Type: application/json
 
 {
-  "payer": "123",
+  "payer": "1",
   "recipient": "1",
   "amount": 100
 }

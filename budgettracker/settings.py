@@ -29,6 +29,8 @@ INSTALLED_APPS = [
     'api.apps.BaseConfig',
 
     'rest_framework', # Django REST Framework
+    'rest_framework_swagger', # Django REST Swagger
+    'drf_yasg', # Yet Another Swagger generator
 ]
 
 MIDDLEWARE = [

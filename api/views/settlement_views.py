@@ -24,3 +24,18 @@ def add_settlement(request):
         return Response({'message': 'Settlement added!'}, status=201)
     else:
         return Response({'message': 'Invalid request'}, status=400)
+    
+
+@api_view(['GET'])
+def get_debt(request, telegram_id):
+    try:
+        person = Person.objects.get(telegram_id=telegram_id)
+    except Person.DoesNotExist:
+        return Response({'message': 'Person not found'}, status=404)
+
+    debts = Settlement.objects.filter(payer=person)
+    return Response([{
+        'payer': debt.payer.telegram_id,
+        'recipient': debt.recipient.telegram_id,
+        'amount': debt.amount
+    } for debt in debts])
