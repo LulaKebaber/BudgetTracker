@@ -2,7 +2,7 @@ from django.db import models
 
 
 class Person(models.Model):
-    name = models.CharField(max_length=100)
+    person_name = models.CharField(max_length=100)
     telegram_id = models.CharField(max_length=50, unique=True)
 
 
@@ -21,6 +21,6 @@ class Settlement(models.Model):
 
 
 class House(models.Model):
-    name = models.CharField(max_length=100)
+    house_name = models.CharField(max_length=100)
     members = models.ManyToManyField(Person, related_name='houses')
     owner = models.ForeignKey(Person, related_name='owned_houses', on_delete=models.CASCADE)

@@ -1,8 +1,11 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from ..models import Person, Expense, Settlement
+from drf_yasg.utils import swagger_auto_schema
+from ..models import Person, Expense
+from ..serializers import expense_serializer
 
 
+@swagger_auto_schema(method='post', request_body=expense_serializer.AddExpenseSerializer)
 @api_view(['POST'])
 def add_expense(request):
     if 'amount' in request.data and 'description' in request.data and 'date' in request.data and 'buyer' in request.data:

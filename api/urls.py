@@ -9,5 +9,5 @@ urlpatterns = [
     path('get-all-persons/', person_views.get_all_persons, name='get_all_persons'),
     path('create-house/', house_views.create_house, name='create_house'),
     path('add-house-member/', house_views.add_house_member, name='add_house_member'),
-    path('get-house-info/', house_views.get_house_info, name='get_house_info')
+    path('get-house-info/<str:house_name>/', house_views.get_house_info, name='get_house_info')
 ]

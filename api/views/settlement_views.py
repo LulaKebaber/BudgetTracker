@@ -1,8 +1,10 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from drf_yasg.utils import swagger_auto_schema
 from ..models import Person, Settlement
+from ..serializers import settlement_serializer
 
-
+@swagger_auto_schema(method='post', request_body=settlement_serializer.AddSettlementSerializer)
 @api_view(['POST'])
 def add_settlement(request):
     if 'payer' in request.data and 'recipient' in request.data and 'amount' in request.data:
@@ -26,6 +28,7 @@ def add_settlement(request):
         return Response({'message': 'Invalid request'}, status=400)
     
 
+@swagger_auto_schema(method='get')
 @api_view(['GET'])
 def get_debt(request, telegram_id):
     try:
