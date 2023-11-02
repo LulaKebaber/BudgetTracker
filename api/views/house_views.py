@@ -46,6 +46,9 @@ def add_house_member(request):
     if not House.objects.filter(house_name=house_name).exists():
         return Response({'message': 'House does not exist!'}, status=400)
 
+    if int(House.objects.get(house_name=house_name).owner.telegram_id) != owner:
+        return Response({'message': 'You have no access to this house!'}, status=400)
+
     house = House.objects.get(house_name=house_name)
     house.members.add(members[0])
     return Response({'message': 'Member added!'}, status=201)
@@ -54,19 +57,14 @@ def add_house_member(request):
 @swagger_auto_schema(method='get')
 @api_view(['GET'])
 def get_house_info(request, house_name):
-    # if 'house_name' in request.data:
-    #     house_name = request.data['house_name']
-    # else:
-    #     return Response({'message': 'Invalid request'}, status=400)
-
     if not House.objects.filter(house_name=house_name).exists():
         return Response({'message': 'House does not exist!'}, status=400)
 
     house = House.objects.get(house_name=house_name)
+    members = list(house.members.values('person_name', 'telegram_id'))
 
     return Response({
         'house_name': house.house_name,
         'owner': house.owner.person_name,
-        'members': house.members
-        # 'members': serializers.serialize("json", house.members)
+        'members': members
     }, status=200)

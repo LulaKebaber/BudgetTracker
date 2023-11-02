@@ -6,12 +6,19 @@ class Person(models.Model):
     telegram_id = models.CharField(max_length=50, unique=True)
 
 
+class House(models.Model):
+    house_name = models.CharField(max_length=100)
+    members = models.ManyToManyField(Person, related_name='houses')
+    owner = models.ForeignKey(Person, related_name='owned_houses', on_delete=models.CASCADE)
+
+
 class Expense(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField()
     date = models.DateField()
     buyer = models.ForeignKey(Person, on_delete=models.CASCADE)
     receipt_image = models.ImageField(upload_to='receipts/', blank=True, null=True)
+    # house_name = models.ForeignKey(House, on_delete=models.CASCADE, blank=True, null=True)
 
 
 class Settlement(models.Model):
@@ -20,7 +27,3 @@ class Settlement(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
 
 
-class House(models.Model):
-    house_name = models.CharField(max_length=100)
-    members = models.ManyToManyField(Person, related_name='houses')
-    owner = models.ForeignKey(Person, related_name='owned_houses', on_delete=models.CASCADE)

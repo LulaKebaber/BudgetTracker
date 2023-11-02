@@ -1,2 +1,7 @@
 /db.sqlite3
 /venv
+/docker-compose.yaml
+/Dockerfile
+/.DS_Store
+/.idea
+```

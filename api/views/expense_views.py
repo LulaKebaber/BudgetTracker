@@ -13,13 +13,15 @@ def add_expense(request):
         description = request.data['description']
         date = request.data['date']
         buyer = request.data['buyer']
-
-        try:
-            buyer = Person.objects.get(telegram_id=buyer)
-        except Person.DoesNotExist:
-            return Response({'message': 'Buyer not found'}, status=400)
-
-        expense = Expense.objects.create(amount=amount, description=description, date=date, buyer=buyer)
-        return Response({'message': 'Expense added!'}, status=201)
     else:
         return Response({'message': 'Invalid request'}, status=400)
+
+    if not Person.objects.filter(telegram_id=buyer).exists():
+        return Response({'message': 'Buyer does not exist!'}, status=400)
+    buyer = Person.objects.get(telegram_id=buyer)
+
+    # if not isinstance(amount, int):
+    #     return Response({'message': 'Amount must be integer!'}, status=400)
+
+    expense = Expense.objects.create(amount=amount, description=description, date=date, buyer=buyer)
+    return Response({'message': 'Expense added!'}, status=201)

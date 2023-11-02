@@ -1,8 +1,9 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from drf_yasg.utils import swagger_auto_schema
-from ..models import Person, Settlement
+from ..models import Person, Settlement, House
 from ..serializers import settlement_serializer
+
 
 @swagger_auto_schema(method='post', request_body=settlement_serializer.AddSettlementSerializer)
 @api_view(['POST'])
@@ -11,34 +12,50 @@ def add_settlement(request):
         payer = request.data['payer']
         recipient = request.data['recipient']
         amount = request.data['amount']
-
-        try:
-            payer = Person.objects.get(telegram_id=payer)
-        except Person.DoesNotExist:
-            return Response({'message': 'Payer not found'}, status=400)
-
-        try:
-            recipient = Person.objects.get(telegram_id=recipient)
-        except Person.DoesNotExist:
-            return Response({'message': 'Recipient not found'}, status=400)
-
-        settlement = Settlement.objects.create(payer=payer, recipient=recipient, amount=amount)
-        return Response({'message': 'Settlement added!'}, status=201)
     else:
         return Response({'message': 'Invalid request'}, status=400)
-    
 
+    if not Person.objects.filter(telegram_id=payer).exists():
+        return Response({'message': 'Payer does not exist!'}, status=400)
+
+    if not Person.objects.filter(telegram_id=recipient).exists():
+        return Response({'message': 'Recipient does not exist!'}, status=400)
+
+    if not House.objects.filter(members__telegram_id=payer) and not House.objects.filter(owner__telegram_id=payer):
+        return Response({'message': 'Payer does not belong to any house!'}, status=400)
+
+    if not House.objects.filter(members__telegram_id=recipient) and not House.objects.filter(owner__telegram_id=recipient):
+        return Response({'message': 'Recipient does not belong to any house!'}, status=400)
+    # return Response("1")
+
+    payer = Person.objects.get(telegram_id=payer)
+    recipient = Person.objects.get(telegram_id=recipient)
+
+    settlement = Settlement.objects.create(payer=payer, recipient=recipient, amount=amount)
+    return Response({'message': 'Settlement added!'}, status=201)
+
+# in progress
 @swagger_auto_schema(method='get')
 @api_view(['GET'])
 def get_debt(request, telegram_id):
-    try:
-        person = Person.objects.get(telegram_id=telegram_id)
-    except Person.DoesNotExist:
-        return Response({'message': 'Person not found'}, status=404)
+    if not Person.objects.filter(telegram_id=telegram_id).exists():
+        return Response({'message': 'Person does not exist!'}, status=400)
 
-    debts = Settlement.objects.filter(payer=person)
-    return Response([{
-        'payer': debt.payer.telegram_id,
-        'recipient': debt.recipient.telegram_id,
-        'amount': debt.amount
-    } for debt in debts])
+    if not House.objects.filter(members__telegram_id=telegram_id) and not House.objects.filter(owner__telegram_id=telegram_id):
+        return Response({'message': 'Person does not belong to any house!'}, status=400)
+
+    person = Person.objects.get(telegram_id=telegram_id)
+    house = House.objects.get(members__telegram_id=telegram_id)
+    house_members = list(house.members.values('person_name', 'telegram_id'))
+
+    debts = {}
+    for member in house_members:
+        debts[member['person_name']] = 0
+
+    for settlement in Settlement.objects.filter(payer=person):
+        debts[settlement.recipient.person_name] -= settlement.amount
+
+    for settlement in Settlement.objects.filter(recipient=person):
+        debts[settlement.payer.person_name] += settlement.amount
+
+    return Response(debts, status=200)

@@ -19,12 +19,3 @@ def add_person(request):
 
     person = Person.objects.create(person_name=person_name, telegram_id=telegram_id)
     return Response({'message': 'Person added!'}, status=201)
-
-
-@api_view(['GET'])
-def get_all_persons(request):
-    persons = Person.objects.all()
-    return Response([{
-        'person_name': person.name,
-        'telegram_id': person.telegram_id
-    } for person in persons])
