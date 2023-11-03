@@ -17,7 +17,7 @@ class Expense(models.Model):
     description = models.TextField()
     date = models.DateField()
     buyer = models.ForeignKey(Person, on_delete=models.CASCADE)
-    receipt_image = models.ImageField(upload_to='receipts/', blank=True, null=True)
+    # receipt_image = models.ImageField(upload_to='receipts/', blank=True, null=True)
 
 
 class Settlement(models.Model):
