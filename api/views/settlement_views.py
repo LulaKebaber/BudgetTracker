@@ -60,5 +60,4 @@ def get_debt(request, telegram_id):
     for settlement in Settlement.objects.filter(recipient=person):
         debts[settlement.payer.username] += settlement.amount
 
-
     return Response({'debts': debts}, status=200)
