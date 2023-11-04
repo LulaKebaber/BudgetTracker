@@ -1,14 +1,14 @@
 databases:
-  - name: mysite
-    databaseName: mysite
-    user: mysite
+  - name: postgres
+    databaseName: postgres
+    user: postgres
 
 services:
   - type: web
-    name: mysite
+    name: BudgetTracker
     runtime: python
     buildCommand: "./build.sh"
-    startCommand: "gunicorn mysite.wsgi:application"
+    startCommand: "gunicorn BudgetTracker.wsgi:application"
     envVars:
       - key: DATABASE_URL
         fromDatabase:
