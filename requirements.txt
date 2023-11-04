@@ -16,7 +16,6 @@ drf-yasg==1.21.7
 dulwich==0.21.6
 fastjsonschema==2.18.1
 idna==3.4
-importlib-metadata==6.8.0
 inflection==0.5.1
 installer==0.7.0
 itypes==1.2.0
