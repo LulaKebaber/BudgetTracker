@@ -1,6 +1,6 @@
 databases:
-  - name: postgres
-    databaseName: postgres
+  - name: BudgetTrackerPostgres
+    databaseName: BudgetTrackerPostgres
     user: postgres
 
 services:
