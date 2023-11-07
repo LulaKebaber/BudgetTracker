@@ -31,7 +31,6 @@ INSTALLED_APPS = [
     'rest_framework', # Django REST Framework
     'rest_framework_swagger', # Django REST Swagger
     'drf_yasg', # Yet Another Swagger generator
-    'celery', # Celery
 ]
 
 MIDDLEWARE = [
@@ -125,20 +124,3 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
-CELERY_BROKER_URL = 'pyamqp://guest:guest@rabbitmq//'
-CELERY_RESULT_BACKEND = 'rpc://'
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'UTC'
-
-
-# RABBITMQ = {
-#     "PROTOCOL": "amqp",
-#     "HOST": "localhost",
-#     "PORT": 5672,
-#     "USER": "guest",
-#     "PASSWORD": "guest",
-# }

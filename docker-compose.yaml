@@ -29,18 +29,3 @@ services:
       - POSTGRES_PASSWORD=postgres
     depends_on:
       - db
-  celery:
-    build: .
-    command: celery -A budgettracker worker -l info
-    volumes:
-      - .:/code
-    depends_on:
-      - db
-  rabbitmq:
-    image: "rabbitmq:3-management"
-    ports:
-      - "15672:15672"
-      - "5672:5672"
-    environment:
-      RABBITMQ_DEFAULT_USER: "guest"
-      RABBITMQ_DEFAULT_PASS: "guest"
