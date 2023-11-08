@@ -1,6 +1,7 @@
 /db.sqlite3
-/venv
+venv
 /.DS_Store
 /.idea
 /data
+.env
 ```
