@@ -100,3 +100,32 @@ class PersonAPITestCase(APITestCase, URLPatternsTestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['message'], 'Person added!')
         self.assertEqual(Person.objects.filter(username='test_member').count(), 1)
+
+
+class SettlementAPITestCase(APITestCase, URLPatternsTestCase):
+    urlpatterns = [
+        path('api/', include('api.urls'))
+    ]
+
+    def setUp(self):
+        self.person = Person.objects.create(username='test_owner', telegram_id='123')
+        self.house = House.objects.create(house_name='test_house', owner=self.person)
+        self.member = Person.objects.create(username='test_member', telegram_id='456')
+        self.house.members.add(self.member)
+        self.house.members.add(self.person)
+
+    def test_add_settlement(self):
+        data = {
+            'amount': 100,
+            'payer': self.person.telegram_id,
+            'username': self.member.username,
+        }
+        url = reverse('add_settlement')
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['message'], 'Settlement added!')
+
+    def test_get_debt(self):
+        url = reverse('get_debt', args=[self.person.telegram_id])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
