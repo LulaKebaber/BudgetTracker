@@ -46,7 +46,7 @@ def add_house_member(request):
     if not House.objects.filter(house_name=house_name).exists():
         return Response({'message': 'House does not exist!'}, status=400)
 
-    if int(House.objects.get(house_name=house_name).owner.telegram_id) != owner:
+    if int(House.objects.get(house_name=house_name).owner.telegram_id) != int(owner):
         return Response({'message': 'You have no access to this house!'}, status=400)
 
     house = House.objects.get(house_name=house_name)
