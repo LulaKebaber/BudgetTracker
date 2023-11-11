@@ -79,3 +79,24 @@ class ExpenseAPITestCase(APITestCase, URLPatternsTestCase):
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['message'], 'Expense added!')
+
+
+class PersonAPITestCase(APITestCase, URLPatternsTestCase):
+    urlpatterns = [
+        path('api/', include('api.urls'))
+    ]
+
+    def setUp(self):
+        self.person = Person.objects.create(username='test_owner', telegram_id='123')
+        self.house = House.objects.create(house_name='test_house', owner=self.person)
+
+    def test_add_person(self):
+        data = {
+            'username': 'test_member',
+            'telegram_id': '789'
+        }
+        url = reverse('add_person')
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['message'], 'Person added!')
+        self.assertEqual(Person.objects.filter(username='test_member').count(), 1)
