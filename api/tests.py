@@ -55,3 +55,4 @@ class HouseAPITestCase(APITestCase, URLPatternsTestCase):
         url = reverse('get_house_info', args=["nonexistent_house"])
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
